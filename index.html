@@ -3,46 +3,236 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CheckNumber Pro - Bulk Number Verification Platform</title>
+    <title>CheckNumber Pro - Official Verification Hub</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen">
-    <div class="max-w-4xl mx-auto p-6 space-y-8">
-        <!-- Header -->
-        <header class="flex justify-between items-center bg-slate-900 p-5 rounded-2xl border border-slate-800 shadow-xl">
-            <div>
-                <h1 class="text-xl font-black bg-gradient-to-r from-indigo-400 to-cyan-400 bg-clip-text text-transparent">CheckNumber Pro</h1>
-                <p class="text-xs text-slate-400">Official Middle-Agent Verification Hub</p>
+<body class="bg-slate-900 text-slate-100 min-h-screen">
+    <!-- Top Navigation Bar (Exact replica of CheckNumber.ai header) -->
+    <header class="bg-slate-950 border-b border-slate-800 px-6 py-4 flex justify-between items-center sticky top-0 z-50">
+        <div class="flex items-center space-x-8">
+            <div class="flex items-center space-x-2">
+                <div class="bg-indigo-600 text-white font-black px-2.5 py-1 rounded-lg text-sm">AI</div>
+                <span class="font-extrabold text-lg tracking-tight">CheckNumber Pro</span>
             </div>
-            <div class="text-right">
-                <span class="text-xs text-emerald-400 block font-semibold uppercase tracking-wider">Wallet Balance</span>
-                <span class="text-lg font-bold" id="user-balance">$10.00 USD</span>
+            <nav class="hidden md:flex space-x-6 text-sm font-medium text-slate-400">
+                <a href="#" class="text-indigo-400 font-semibold border-b-2 border-indigo-500 pb-1">Checkers</a>
+                <a href="#" class="hover:text-slate-200 transition">Tasks</a>
+                <a href="#" class="hover:text-slate-200 transition">Workspace</a>
+                <a href="#" class="hover:text-slate-200 transition">Toolbox</a>
+                <a href="#" class="hover:text-slate-200 transition">Keys</a>
+                <a href="#" class="hover:text-slate-200 transition">Referrals</a>
+                <a href="#" class="hover:text-slate-200 transition">Docs</a>
+            </nav>
+        </div>
+        <div class="flex items-center space-x-4">
+            <button class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold px-4 py-2 rounded-xl transition shadow-lg shadow-indigo-600/30">
+                + Add credits
+            </button>
+            <div class="bg-slate-800 border border-slate-700 text-xs font-bold px-3 py-2 rounded-xl text-emerald-400">
+                $10.00 USD
             </div>
-        </header>
+        </div>
+    </header>
 
-        <!-- Main Workspace -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <!-- Sidebar Navigation / Services -->
-            <div class="bg-slate-900 p-4 rounded-2xl border border-slate-800 space-y-2">
-                <h2 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3 px-2">Select Service Module</h2>
-                <button onclick="selectService('tg_active', 'Telegram Activity Checker')" class="w-full text-left px-3 py-2.5 rounded-xl text-sm font-medium hover:bg-indigo-600/20 hover:text-indigo-400 transition bg-indigo-600/10 text-indigo-400 border border-indigo-500/30">📱 Telegram Activity</button>
-                <button onclick="selectService('tg_avatar', 'Telegram Profile Checker')" class="w-full text-left px-3 py-2.5 rounded-xl text-sm font-medium hover:bg-slate-800 text-slate-300 transition">👤 Telegram Profile</button>
-                <button onclick="selectService('ws_active', 'WhatsApp Active Checker')" class="w-full text-left px-3 py-2.5 rounded-xl text-sm font-medium hover:bg-slate-800 text-slate-300 transition">💬 WhatsApp Active</button>
-                <button onclick="selectService('instagram_profile', 'Instagram Profile Checker')" class="w-full text-left px-3 py-2.5 rounded-xl text-sm font-medium hover:bg-slate-800 text-slate-300 transition">📸 Instagram Profile</button>
-                <button onclick="selectService('phoneCheck', 'Global Carrier Validation')" class="w-full text-left px-3 py-2.5 rounded-xl text-sm font-medium hover:bg-slate-800 text-slate-300 transition">🌍 Carrier Lookup</button>
+    <!-- Main Dashboard Container -->
+    <main class="max-w-7xl mx-auto p-6 space-y-6">
+        <!-- Filter Category Pills -->
+        <div class="flex flex-wrap gap-2 items-center bg-slate-950/60 p-3 rounded-2xl border border-slate-800">
+            <button onclick="filterCategory('all')" class="cat-btn bg-indigo-600 text-white text-xs font-semibold px-4 py-2 rounded-xl transition">🔍 All</button>
+            <button onclick="filterCategory('telegram')" class="cat-btn bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold px-4 py-2 rounded-xl transition">📱 Telegram</button>
+            <button onclick="filterCategory('whatsapp')" class="cat-btn bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold px-4 py-2 rounded-xl transition">💬 WhatsApp</button>
+            <button onclick="filterCategory('viber')" class="cat-btn bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold px-4 py-2 rounded-xl transition">📞 Viber</button>
+            <button onclick="filterCategory('instagram')" class="cat-btn bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold px-4 py-2 rounded-xl transition">📸 Instagram</button>
+            <button onclick="filterCategory('carrier')" class="cat-btn bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold px-4 py-2 rounded-xl transition">🌍 Carrier & Number</button>
+        </div>
+
+        <!-- Service Cards Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <!-- Telegram Card -->
+            <div class="service-card bg-slate-950 border border-slate-800 p-5 rounded-2xl space-y-4 shadow-xl" data-cat="telegram">
+                <div class="flex justify-between items-center border-b border-slate-800/80 pb-3">
+                    <span class="font-bold text-sm flex items-center space-x-2"><span>📱</span> <span>Telegram</span></span>
+                    <span class="bg-amber-500/10 text-amber-400 text-[10px] font-extrabold px-2 py-0.5 rounded-full uppercase">HOT</span>
+                </div>
+                <div class="space-y-2 text-xs">
+                    <div onclick="selectService('tg_active', 'Telegram Number Activity', '$3.3')" class="flex justify-between p-2.5 rounded-xl hover:bg-slate-800 cursor-pointer transition border border-transparent hover:border-slate-700">
+                        <span class="text-slate-300 font-medium">Number Activity</span>
+                        <span class="text-emerald-400 font-bold">$3.3 / 10K</span>
+                    </div>
+                    <div onclick="selectService('tg_profile', 'Telegram Profile Checker', '$4.3')" class="flex justify-between p-2.5 rounded-xl hover:bg-slate-800 cursor-pointer transition border border-transparent hover:border-slate-700">
+                        <span class="text-slate-300 font-medium">Number Profile</span>
+                        <span class="text-emerald-400 font-bold">$4.3 / 10K</span>
+                    </div>
+                    <div onclick="selectService('tg_checker', 'Telegram Number Checker', '$1.3')" class="flex justify-between p-2.5 rounded-xl hover:bg-slate-800 cursor-pointer transition border border-transparent hover:border-slate-700">
+                        <span class="text-slate-300 font-medium">Number Checker</span>
+                        <span class="text-emerald-400 font-bold">$1.3 / 10K</span>
+                    </div>
+                </div>
             </div>
 
-            <!-- Task Configuration & Execution Panel -->
-            <div class="md:col-span-2 bg-slate-900 p-6 rounded-2xl border border-slate-800 space-y-6">
+            <!-- WhatsApp Card -->
+            <div class="service-card bg-slate-950 border border-slate-800 p-5 rounded-2xl space-y-4 shadow-xl" data-cat="whatsapp">
+                <div class="flex justify-between items-center border-b border-slate-800/80 pb-3">
+                    <span class="font-bold text-sm flex items-center space-x-2"><span>💬</span> <span>WhatsApp</span></span>
+                    <span class="bg-amber-500/10 text-amber-400 text-[10px] font-extrabold px-2 py-0.5 rounded-full uppercase">HOT</span>
+                </div>
+                <div class="space-y-2 text-xs">
+                    <div onclick="selectService('ws_active', 'WhatsApp Active Checker', '$1.2')" class="flex justify-between p-2.5 rounded-xl hover:bg-slate-800 cursor-pointer transition border border-transparent hover:border-slate-700">
+                        <span class="text-slate-300 font-medium">Number Activity</span>
+                        <span class="text-emerald-400 font-bold">$1.2 / 10K</span>
+                    </div>
+                    <div onclick="selectService('ws_profile', 'WhatsApp Profile Checker', '$3.8')" class="flex justify-between p-2.5 rounded-xl hover:bg-slate-800 cursor-pointer transition border border-transparent hover:border-slate-700">
+                        <span class="text-slate-300 font-medium">Number Profile</span>
+                        <span class="text-emerald-400 font-bold">$3.8 / 10K</span>
+                    </div>
+                    <div onclick="selectService('ws_checker', 'WhatsApp Number Checker', '$0.7')" class="flex justify-between p-2.5 rounded-xl hover:bg-slate-800 cursor-pointer transition border border-transparent hover:border-slate-700">
+                        <span class="text-slate-300 font-medium">Number Checker</span>
+                        <span class="text-emerald-400 font-bold">$0.7 / 10K</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Viber Card -->
+            <div class="service-card bg-slate-950 border border-slate-800 p-5 rounded-2xl space-y-4 shadow-xl" data-cat="viber">
+                <div class="flex justify-between items-center border-b border-slate-800/80 pb-3">
+                    <span class="font-bold text-sm flex items-center space-x-2"><span>📞</span> <span>Viber</span></span>
+                </div>
+                <div class="space-y-2 text-xs">
+                    <div onclick="selectService('viber_checker', 'Viber Number Checker', '$0.25')" class="flex justify-between p-2.5 rounded-xl hover:bg-slate-800 cursor-pointer transition border border-transparent hover:border-slate-700">
+                        <span class="text-slate-300 font-medium">Number Checker</span>
+                        <span class="text-emerald-400 font-bold">$0.25 / 10K</span>
+                    </div>
+                    <div onclick="selectService('viber_activity', 'Viber Activity Checker', '$2.5')" class="flex justify-between p-2.5 rounded-xl hover:bg-slate-800 cursor-pointer transition border border-transparent hover:border-slate-700">
+                        <span class="text-slate-300 font-medium">Number Activity</span>
+                        <span class="text-emerald-400 font-bold">$2.5 / 10K</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Instagram Card -->
+            <div class="service-card bg-slate-950 border border-slate-800 p-5 rounded-2xl space-y-4 shadow-xl" data-cat="instagram">
+                <div class="flex justify-between items-center border-b border-slate-800/80 pb-3">
+                    <span class="font-bold text-sm flex items-center space-x-2"><span>📸</span> <span>Instagram</span></span>
+                </div>
+                <div class="space-y-2 text-xs">
+                    <div onclick="selectService('ig_checker', 'Instagram Number Checker', '$1.5')" class="flex justify-between p-2.5 rounded-xl hover:bg-slate-800 cursor-pointer transition border border-transparent hover:border-slate-700">
+                        <span class="text-slate-300 font-medium">Number Checker</span>
+                        <span class="text-emerald-400 font-bold">$1.5 / 10K</span>
+                    </div>
+                    <div onclick="selectService('ig_email', 'Instagram Email Checker', '$1.5')" class="flex justify-between p-2.5 rounded-xl hover:bg-slate-800 cursor-pointer transition border border-transparent hover:border-slate-700">
+                        <span class="text-slate-300 font-medium">Email Checker</span>
+                        <span class="text-emerald-400 font-bold">$1.5 / 10K</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Active Task Submission Workspace Panel -->
+        <div class="bg-slate-950 border border-indigo-500/30 p-6 rounded-3xl space-y-6 shadow-2xl">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-4">
                 <div>
-                    <h2 id="current-service-title" class="text-lg font-bold">Telegram Activity Checker</h2>
-                    <p class="text-xs text-slate-400">Upload your batch text file containing numbers in E.164 format (one per line).</p>
+                    <h2 id="active-service-title" class="text-lg font-black text-indigo-400">Telegram Number Activity</h2>
+                    <p class="text-xs text-slate-400">Selected Service Rate: <span id="active-service-price" class="text-emerald-400 font-bold">$3.3 / 10K numbers</span></p>
+                </div>
+                <span class="bg-indigo-600/20 text-indigo-400 text-xs font-bold px-3 py-1 rounded-xl border border-indigo-500/30">Ready to Upload</span>
+            </div>
+
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Upload Batch File (.txt or .csv format, one entry per line)</label>
+                    <input type="file" id="batch_file" accept=".txt,.csv" class="w-full bg-slate-900 border border-slate-800 rounded-2xl p-4 text-sm text-slate-300 file:mr-4 file:py-2.5 file:px-5 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-indigo-600 file:text-white hover:file:bg-indigo-500 cursor-pointer">
                 </div>
 
-                <div class="space-y-4">
-                    <div>
-                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Upload Batch File (.txt or .csv)</label>
-                        <input type="file" id="batch_file" accept=".txt,.csv" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-sm text-slate-300 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-indigo-600 file:text-white hover:file:bg-indigo-500 cursor-pointer">
-                    </div>
+                <!-- SUBMIT BUTTON (Clearly Visible) -->
+                <button onclick="startTaskSubmission()" class="w-full bg-gradient-to-r from-indigo-600 to-cyan-600 hover:from-indigo-500 hover:to-cyan-500 text-white font-extrabold py-4 rounded-2xl transition shadow-xl shadow-indigo-600/30 text-base">
+                    🚀 Submit Bulk Task to CheckNumber API
+                </button>
+            </div>
 
-                    <button onclick="startTaskSubmission()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3.5 rounded-xl transition shadow-lg
+            <!-- Real-time Status & Result Box -->
+            <div id="status-box" class="hidden bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-3 text-sm">
+                <p class="text-amber-400 font-bold flex items-center space-x-2" id="status-text">
+                    <span>⏳</span> <span>Processing Task...</span>
+                </p>
+                <div id="result-output" class="text-xs text-slate-300 font-mono bg-slate-950 p-4 rounded-xl border border-slate-800 overflow-x-auto"></div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        let currentTaskType = "tg_active";
+        const BACKEND_URL = "https://trangle141-number-checker-backend.hf.space";
+
+        function selectService(taskType, title, price) {
+            currentTaskType = taskType;
+            document.getElementById('active-service-title').innerText = title;
+            document.getElementById('active-service-price').innerText = price + " / 10K numbers";
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+        }
+
+        function filterCategory(cat) {
+            document.querySelectorAll('.cat-btn').forEach(b => {
+                b.classList.remove('bg-indigo-600', 'text-white');
+                b.classList.add('bg-slate-800', 'text-slate-300');
+            });
+            event.target.classList.remove('bg-slate-800', 'text-slate-300');
+            event.target.classList.add('bg-indigo-600', 'text-white');
+
+            document.querySelectorAll('.service-card').forEach(card => {
+                if (cat === 'all' || card.getAttribute('data-cat') === cat) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        async function startTaskSubmission() {
+            const fileInput = document.getElementById('batch_file');
+            if (fileInput.files.length === 0) {
+                alert("Please select a batch .txt or .csv file first.");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("file", fileInput.files[0]);
+            formData.append("task_type", currentTaskType);
+            formData.append("user_id", "demo-user-123");
+
+            const statusBox = document.getElementById('status-box');
+            const statusText = document.getElementById('status-text');
+            const resultOutput = document.getElementById('result-output');
+            
+            statusBox.classList.remove('hidden');
+            statusText.innerHTML = "<span>⏳</span> <span>Uploading file and submitting to CheckNumber API...</span>";
+            resultOutput.innerText = "";
+
+            try {
+                const res = await fetch(`${BACKEND_URL}/api/submit-task`, {
+                    method: "POST",
+                    body: formData
+                });
+
+                const responseText = await res.text();
+                let data;
+                try {
+                    data = JSON.parse(responseText);
+                } catch (e) {
+                    throw new Error("Server is waking up or returned HTML: " + responseText.substring(0, 100));
+                }
+                
+                if (res.ok) {
+                    statusText.innerHTML = "<span>✅</span> <span class='text-emerald-400 font-bold'>Task successfully queued and accepted!</span>";
+                    resultOutput.innerText = JSON.stringify(data, null, 2);
+                } else {
+                    statusText.innerHTML = "<span>❌</span> <span class='text-red-400 font-bold'>Error from API</span>";
+                    resultOutput.innerText = data.detail || JSON.stringify(data);
+                }
+            } catch (err) {
+                statusText.innerHTML = "<span>❌</span> <span class='text-red-400 font-bold'>Connection Error</span>";
+                resultOutput.innerText = err.message + "\n\nTip: Make sure your Hugging Face Space backend is running!";
+            }
+        }
+    </script>
+</body>
+</html>
