@@ -1,67 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CheckNumber Pro - Bulk Number Verification Platform</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-slate-950 text-slate-100 min-h-screen">
-    <div class="max-w-4xl mx-auto p-6 space-y-8">
-        <!-- Header -->
-        <header class="flex justify-between items-center bg-slate-900 p-5 rounded-2xl border border-slate-800 shadow-xl">
-            <div>
-                <h1 class="text-xl font-black bg-gradient-to-r from-indigo-400 to-cyan-400 bg-clip-text text-transparent">CheckNumber Pro</h1>
-                <p class="text-xs text-slate-400">Official Middle-Agent Verification Hub</p>
-            </div>
-            <div class="text-right">
-                <span class="text-xs text-emerald-400 block font-semibold uppercase tracking-wider">Wallet Balance</span>
-                <span class="text-lg font-bold" id="user-balance">$10.00 USD</span>
-            </div>
-        </header>
-
-        <!-- Main Workspace -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <!-- Sidebar Navigation / Services -->
-            <div class="bg-slate-900 p-4 rounded-2xl border border-slate-800 space-y-2">
-                <h2 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3 px-2">Select Service Module</h2>
-                <button onclick="selectService('tg_active', 'Telegram Activity Checker')" class="w-full text-left px-3 py-2.5 rounded-xl text-sm font-medium hover:bg-indigo-600/20 hover:text-indigo-400 transition bg-indigo-600/10 text-indigo-400 border border-indigo-500/30">📱 Telegram Activity</button>
-                <button onclick="selectService('tg_avatar', 'Telegram Profile Checker')" class="w-full text-left px-3 py-2.5 rounded-xl text-sm font-medium hover:bg-slate-800 text-slate-300 transition">👤 Telegram Profile</button>
-                <button onclick="selectService('ws_active', 'WhatsApp Active Checker')" class="w-full text-left px-3 py-2.5 rounded-xl text-sm font-medium hover:bg-slate-800 text-slate-300 transition">💬 WhatsApp Active</button>
-                <button onclick="selectService('instagram_profile', 'Instagram Profile Checker')" class="w-full text-left px-3 py-2.5 rounded-xl text-sm font-medium hover:bg-slate-800 text-slate-300 transition">📸 Instagram Profile</button>
-                <button onclick="selectService('phoneCheck', 'Global Carrier Validation')" class="w-full text-left px-3 py-2.5 rounded-xl text-sm font-medium hover:bg-slate-800 text-slate-300 transition">🌍 Carrier Lookup</button>
-            </div>
-
-            <!-- Task Configuration & Execution Panel -->
-            <div class="md:col-span-2 bg-slate-900 p-6 rounded-2xl border border-slate-800 space-y-6">
-                <div>
-                    <h2 id="current-service-title" class="text-lg font-bold">Telegram Activity Checker</h2>
-                    <p class="text-xs text-slate-400">Upload your batch text file containing numbers in E.164 format (one per line).</p>
-                </div>
-
-                <div class="space-y-4">
-                    <div>
-                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Upload Batch File (.txt or .csv)</label>
-                        <input type="file" id="batch_file" accept=".txt,.csv" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-sm text-slate-300 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-indigo-600 file:text-white hover:file:bg-indigo-500 cursor-pointer">
-                    </div>
-
-                    <button onclick="startTaskSubmission()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3.5 rounded-xl transition shadow-lg shadow-indigo-600/30">
-                        Submit Bulk Task to API
-                    </button>
-                </div>
-
-                <!-- Status & Result Box -->
-                <div id="status-box" class="hidden bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-2 text-sm">
-                    <p class="text-amber-400 font-medium" id="status-text">Task Processing...</p>
-                    <div id="result-output" class="text-xs text-slate-400 font-mono break-all"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
+<script>
         let selectedTaskType = "tg_active";
-        const BACKEND_URL = "https://trangle141-number-checker-backend.hf.space"; // Replace with your Render URL later
+        const BACKEND_URL = "https://trangle141-number-checker-backend.hf.space"; // NO trailing slash!
 
         function selectService(taskType, title) {
             selectedTaskType = taskType;
@@ -85,7 +24,7 @@
             const resultOutput = document.getElementById('result-output');
             
             statusBox.classList.remove('hidden');
-            statusText.innerText = "⏳ Uploading and submitting task to CheckNumber API...";
+            statusText.innerText = "⏳ Connecting to backend & submitting task...";
             resultOutput.innerText = "";
 
             try {
@@ -93,20 +32,25 @@
                     method: "POST",
                     body: formData
                 });
-                const data = await res.json();
+
+                const responseText = await res.text();
+                let data;
+                try {
+                    data = JSON.parse(responseText);
+                } catch (e) {
+                    throw new Error("Server is waking up or returned HTML: " + responseText.substring(0, 100));
+                }
                 
                 if (res.ok) {
                     statusText.innerText = "✅ Task successfully queued!";
                     resultOutput.innerText = JSON.stringify(data, null, 2);
                 } else {
-                    statusText.innerText = "❌ Error submitting task";
-                    resultOutput.innerText = data.detail || "Unknown error";
+                    statusText.innerText = "❌ Error from CheckNumber API";
+                    resultOutput.innerText = data.detail || JSON.stringify(data);
                 }
             } catch (err) {
-                statusText.innerText = "❌ Network connection error";
-                resultOutput.innerText = err.message;
+                statusText.innerText = "❌ Connection Error";
+                resultOutput.innerText = err.message + "\n\nTip: Make sure your Hugging Face Space status is 'Running'!";
             }
         }
     </script>
-</body>
-</html>
